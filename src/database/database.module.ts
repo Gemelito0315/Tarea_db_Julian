@@ -1,24 +1,28 @@
 import { Module, Global } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigType } from '@nestjs/config'; // <-- añadir ConfigModule
+import { ConfigModule, ConfigType } from '@nestjs/config';
 import config from '../config';
 
 @Global()
 @Module({
   imports: [
+    ConfigModule.forFeature(config),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],               // <-- agregar aquí
       inject: [config.KEY],
-      useFactory: (cfg: ConfigType<typeof config>) => ({
-        type: 'postgres',
-        host: cfg.database.host,
-        port: cfg.database.port,
-        username: cfg.database.user,
-        password: cfg.database.password,
-        database: cfg.database.name,
-        synchronize: true,
-        autoLoadEntities: true,
-      }),
+      useFactory: (configType: ConfigType<typeof config>) => {
+        const { user, host, name, password, port } = configType.database;
+
+        return {
+          type: 'postgres',
+          host,
+          port,
+          username: user,
+          password,
+          database: name,
+          synchronize: true,
+          autoLoadEntities: true,
+        };
+      },
     }),
   ],
   exports: [TypeOrmModule],

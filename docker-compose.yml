@@ -2,17 +2,17 @@ services:
   postgres:
     image: postgres:17
     environment:
-     - POSTGRES_DB=tarea_db
+     - POSTGRES_DB=Tarea_db
      - POSTGRES_USER=Tarea
      - POSTGRES_PASSWORD=123456
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=Tarea@admin.com
+      - PGADMIN_DEFAULT_EMAIL=root@admin.com
       - PGADMIN_DEFAULT_PASSWORD=root
     ports: 
       - "5050:80"
